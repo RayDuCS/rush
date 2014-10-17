@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B519F0C9CC000E0CAB /* Cube.swift */; };
+		0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B619F0C9CC000E0CAB /* Floor.swift */; };
 		0FE97ABD19D542A500B20FCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97ABC19D542A500B20FCD /* AppDelegate.swift */; };
 		0FE97ABF19D542A500B20FCD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0FE97ABE19D542A500B20FCD /* GameScene.sks */; };
 		0FE97AC119D542A500B20FCD /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97AC019D542A500B20FCD /* GameScene.swift */; };
@@ -28,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0FDCB1B519F0C9CC000E0CAB /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cube.swift; path = Obj/Cube.swift; sourceTree = "<group>"; };
+		0FDCB1B619F0C9CC000E0CAB /* Floor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Floor.swift; path = Obj/Floor.swift; sourceTree = "<group>"; };
 		0FE97AB719D542A500B20FCD /* rush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE97ABB19D542A500B20FCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0FE97ABC19D542A500B20FCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +64,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0FDCB1B419F0C9C0000E0CAB /* Obj */ = {
+			isa = PBXGroup;
+			children = (
+				0FDCB1B519F0C9CC000E0CAB /* Cube.swift */,
+				0FDCB1B619F0C9CC000E0CAB /* Floor.swift */,
+			);
+			name = Obj;
+			sourceTree = "<group>";
+		};
 		0FE97AAE19D542A500B20FCD = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +94,7 @@
 		0FE97AB919D542A500B20FCD /* rush */ = {
 			isa = PBXGroup;
 			children = (
+				0FDCB1B419F0C9C0000E0CAB /* Obj */,
 				0FE97ABC19D542A500B20FCD /* AppDelegate.swift */,
 				0FE97ABE19D542A500B20FCD /* GameScene.sks */,
 				0FE97AC019D542A500B20FCD /* GameScene.swift */,
@@ -219,7 +233,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */,
 				0FE97AC119D542A500B20FCD /* GameScene.swift in Sources */,
+				0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */,
 				0FE97AC319D542A500B20FCD /* GameViewController.swift in Sources */,
 				0FE97ABD19D542A500B20FCD /* AppDelegate.swift in Sources */,
 			);
@@ -413,6 +429,7 @@
 				0FE97ADC19D542A500B20FCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0FE97ADD19D542A500B20FCD /* Build configuration list for PBXNativeTarget "rushTests" */ = {
 			isa = XCConfigurationList;
@@ -421,6 +438,7 @@
 				0FE97ADF19D542A500B20FCD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
