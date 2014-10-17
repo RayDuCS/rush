@@ -9,6 +9,13 @@
 import Foundation
 import SpriteKit
 
+let RATIO_FLOOR_PIECE_WIDTH = CGFloat(0.02)
+let RATIO_FLOOR_PIECE_HEIGHT = CGFloat(0.01)
+let RATIO_FLOOR_PIECE_X = CGFloat(0.4)
+let RATIO_FLOOR_PIECE_Y = CGFloat(0.3)
+let RATIO_FLOOR_LINE_WIDTH = CGFloat(1)
+let RATIO_FLOOR_LINE_HEIGHT = CGFloat(0.01)
+
 class Floor {
     
     init () {
@@ -17,7 +24,25 @@ class Floor {
     init(width: CGFloat, height: CGFloat) {
         floorPieces = []
         sampleFloorPiece = SKSpriteNode(color: UIColor.blueColor(), size: CGSize(width: width, height: height))
+    }
+    
+    func addLine(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) -> SKSpriteNode {
+        floorLine = SKSpriteNode(color: UIColor.blackColor(), size: CGSize(width: width, height: height))
+        floorLine.position.x = x
+        floorLine.position.y = y
         
+        return floorLine
+    }
+    
+    func fillPieces(x: CGFloat, y: CGFloat) -> [SKSpriteNode] {
+        let amount = Int(1 / RATIO_FLOOR_PIECE_WIDTH)
+        
+        addPiece(x, y: y)
+        for i in 1...(amount - 1) {
+            addNextPiece()
+        }
+        
+        return floorPieces
     }
     
     func addPiece(x: CGFloat, y: CGFloat) -> SKSpriteNode {
@@ -44,14 +69,12 @@ class Floor {
     }
     
     func update(speed: CGFloat) ->SKSpriteNode? {
-        println()
         for piece in floorPieces {
             piece.position.x -= speed
-            println("piece \(piece.position.x)")
         }
         
         if let piece = floorPieces.first {
-            if CGRectGetMinX(piece.frame) <= 0 {
+            if CGRectGetMaxX(piece.frame) <= 0 {
                 if let newPiece = self.addNextPiece() {
                     floorPieces.removeAtIndex(0)
                     piece.removeFromParent()
@@ -67,4 +90,5 @@ class Floor {
     
     var floorPieces: [SKSpriteNode] = []
     var sampleFloorPiece: SKSpriteNode = SKSpriteNode()
+    var floorLine: SKSpriteNode = SKSpriteNode()
 }

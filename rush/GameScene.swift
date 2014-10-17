@@ -29,49 +29,47 @@ class GameScene: SKScene {
         let viewWidth = CGRectGetWidth(self.frame)
         let viewHeight = CGRectGetHeight(self.frame)
         
+        println("\(viewWidth) \(viewHeight)")
         
         
-        rushingCube = Cube(color: UIColor.blackColor(), size: CGSize(width: viewWidth / 16, height: viewHeight / 16))
-        rushingCube.position.x = viewWidth / 16 * 3
-        rushingCube.position.y = viewHeight / 16 * 7
-        //rushingCube.position.x = 100
-        //rushingCube.position.y = 100
+        
+        rushingCube = Cube(color: UIColor.clearColor(), size: CGSize(width: viewWidth * RATIO_CUBE_WIDTH, height: viewHeight * RATIO_CUBE_HEIGHT))
+        rushingCube.position = CGPointMake(viewWidth * RATIO_CUBE_X, viewHeight * RATIO_CUBE_Y)
     
         println("rushingCube \(rushingCube.position.x) \(rushingCube.position.y) ")
         self.addChild(rushingCube)
         
         
-        floor = Floor(width: viewWidth / 5, height: viewHeight / 36)
+        floor = Floor(width: viewWidth * RATIO_FLOOR_PIECE_WIDTH, height: viewHeight * RATIO_FLOOR_PIECE_HEIGHT)
+        var lineY = rushingCube.position.y - rushingCube.size.height / 2 - viewHeight * RATIO_FLOOR_LINE_HEIGHT / 2
+        var floorLine = floor.addLine(viewWidth / 2, y: lineY, width: viewWidth * RATIO_FLOOR_LINE_WIDTH, height: viewHeight * RATIO_FLOOR_LINE_HEIGHT)
+        self.addChild(floorLine)
         
-        let loc_x = rushingCube.position.x - rushingCube.size.width / 2
-        let loc_y = rushingCube.position.y - rushingCube.size.height / 2 - viewHeight / 36 / 2
-        var firstPiece = floor.addPiece(loc_x, y: loc_y)
-        
-        self.addChild(firstPiece)
-        
-        if let newPiece = floor.addNextPiece() {
-            self.addChild(newPiece)
-        }
-        
-        if let newPiece = floor.addNextPiece() {
-            self.addChild(newPiece)
+        let loc_x = CGFloat(0)
+        let loc_y = floorLine.position.y - floorLine.size.height / 2 - viewHeight * RATIO_FLOOR_PIECE_HEIGHT / 2
+        let pieces = floor.fillPieces(loc_x, y: loc_y)
+        for piece in pieces {
+            self.addChild(piece)
         }
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
+        rushingCube.userTapped()
+        
         for touch: AnyObject in touches {
-            /*
             let location = touch.locationInNode(self)
+            println("loc \(location.x) \(location.y)")
             
+            
+            /*
             let sprite = SKSpriteNode(imageNamed:"Spaceship")
             
             sprite.xScale = 0.5
             sprite.yScale = 0.5
             sprite.position = location
             
-            println("loc \(location.x) \(location.y)")
             
             let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
             
@@ -84,7 +82,8 @@ class GameScene: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-        if let newPiece = floor.update(1) {
+        rushingCube.jump()
+        if let newPiece = floor.update(3) {
             self.addChild(newPiece)
         }
     }
