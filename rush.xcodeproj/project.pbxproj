@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B519F0C9CC000E0CAB /* Cube.swift */; };
 		0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B619F0C9CC000E0CAB /* Floor.swift */; };
+		0FDCB1BB19F0EBCB000E0CAB /* images.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */; };
 		0FE97ABD19D542A500B20FCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97ABC19D542A500B20FCD /* AppDelegate.swift */; };
 		0FE97ABF19D542A500B20FCD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0FE97ABE19D542A500B20FCD /* GameScene.sks */; };
 		0FE97AC119D542A500B20FCD /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97AC019D542A500B20FCD /* GameScene.swift */; };
@@ -32,6 +33,7 @@
 /* Begin PBXFileReference section */
 		0FDCB1B519F0C9CC000E0CAB /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cube.swift; path = Obj/Cube.swift; sourceTree = "<group>"; };
 		0FDCB1B619F0C9CC000E0CAB /* Floor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Floor.swift; path = Obj/Floor.swift; sourceTree = "<group>"; };
+		0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = images.jpeg; path = Images/images.jpeg; sourceTree = "<group>"; };
 		0FE97AB719D542A500B20FCD /* rush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE97ABB19D542A500B20FCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0FE97ABC19D542A500B20FCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +75,14 @@
 			name = Obj;
 			sourceTree = "<group>";
 		};
+		0FDCB1B919F0EB9A000E0CAB /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		0FE97AAE19D542A500B20FCD = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +104,7 @@
 		0FE97AB919D542A500B20FCD /* rush */ = {
 			isa = PBXGroup;
 			children = (
+				0FDCB1B919F0EB9A000E0CAB /* Images */,
 				0FDCB1B419F0C9C0000E0CAB /* Obj */,
 				0FE97ABC19D542A500B20FCD /* AppDelegate.swift */,
 				0FE97ABE19D542A500B20FCD /* GameScene.sks */,
@@ -213,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FE97ACB19D542A500B20FCD /* LaunchScreen.xib in Resources */,
+				0FDCB1BB19F0EBCB000E0CAB /* images.jpeg in Resources */,
 				0FE97AC819D542A500B20FCD /* Images.xcassets in Resources */,
 				0FE97ABF19D542A500B20FCD /* GameScene.sks in Resources */,
 				0FE97AC619D542A500B20FCD /* Main.storyboard in Resources */,
