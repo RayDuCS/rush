@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FD68F1C19FC1A4600173A88 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD68F1B19FC1A4600173A88 /* Obstacle.swift */; };
+		0FD68F2019FC217E00173A88 /* back_triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FD68F1D19FC217E00173A88 /* back_triangle.png */; };
+		0FD68F2119FC217E00173A88 /* rect.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 0FD68F1E19FC217E00173A88 /* rect.jpeg */; };
+		0FD68F2219FC217E00173A88 /* triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FD68F1F19FC217E00173A88 /* triangle.png */; };
 		0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B519F0C9CC000E0CAB /* Cube.swift */; };
 		0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B619F0C9CC000E0CAB /* Floor.swift */; };
 		0FDCB1BB19F0EBCB000E0CAB /* images.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */; };
@@ -31,6 +35,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0FD68F1B19FC1A4600173A88 /* Obstacle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Obstacle.swift; path = Obj/Obstacle.swift; sourceTree = "<group>"; };
+		0FD68F1D19FC217E00173A88 /* back_triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back_triangle.png; path = Images/back_triangle.png; sourceTree = "<group>"; };
+		0FD68F1E19FC217E00173A88 /* rect.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = rect.jpeg; path = Images/rect.jpeg; sourceTree = "<group>"; };
+		0FD68F1F19FC217E00173A88 /* triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = triangle.png; path = Images/triangle.png; sourceTree = "<group>"; };
 		0FDCB1B519F0C9CC000E0CAB /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cube.swift; path = Obj/Cube.swift; sourceTree = "<group>"; };
 		0FDCB1B619F0C9CC000E0CAB /* Floor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Floor.swift; path = Obj/Floor.swift; sourceTree = "<group>"; };
 		0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = images.jpeg; path = Images/images.jpeg; sourceTree = "<group>"; };
@@ -71,6 +79,7 @@
 			children = (
 				0FDCB1B519F0C9CC000E0CAB /* Cube.swift */,
 				0FDCB1B619F0C9CC000E0CAB /* Floor.swift */,
+				0FD68F1B19FC1A4600173A88 /* Obstacle.swift */,
 			);
 			name = Obj;
 			sourceTree = "<group>";
@@ -78,6 +87,9 @@
 		0FDCB1B919F0EB9A000E0CAB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0FD68F1D19FC217E00173A88 /* back_triangle.png */,
+				0FD68F1E19FC217E00173A88 /* rect.jpeg */,
+				0FD68F1F19FC217E00173A88 /* triangle.png */,
 				0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */,
 			);
 			name = Images;
@@ -192,6 +204,7 @@
 				TargetAttributes = {
 					0FE97AB619D542A500B20FCD = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = DT9ZKB47F4;
 					};
 					0FE97ACF19D542A500B20FCD = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -223,10 +236,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FD68F2019FC217E00173A88 /* back_triangle.png in Resources */,
 				0FE97ACB19D542A500B20FCD /* LaunchScreen.xib in Resources */,
 				0FDCB1BB19F0EBCB000E0CAB /* images.jpeg in Resources */,
 				0FE97AC819D542A500B20FCD /* Images.xcassets in Resources */,
 				0FE97ABF19D542A500B20FCD /* GameScene.sks in Resources */,
+				0FD68F2219FC217E00173A88 /* triangle.png in Resources */,
+				0FD68F2119FC217E00173A88 /* rect.jpeg in Resources */,
 				0FE97AC619D542A500B20FCD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -247,6 +263,7 @@
 			files = (
 				0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */,
 				0FE97AC119D542A500B20FCD /* GameScene.swift in Sources */,
+				0FD68F1C19FC1A4600173A88 /* Obstacle.swift in Sources */,
 				0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */,
 				0FE97AC319D542A500B20FCD /* GameViewController.swift in Sources */,
 				0FE97ABD19D542A500B20FCD /* AppDelegate.swift in Sources */,
@@ -372,9 +389,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = rush/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -382,9 +402,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = rush/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

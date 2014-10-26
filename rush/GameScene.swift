@@ -8,62 +8,56 @@
 
 import SpriteKit
 
+// This is the main body of the game.
+// The game is like Genometry Rush, where a cube is moving fast on the floor with obstacles. User can control the cube to avoid clash.
+//
+// Game Control: Tap and Press.
+//               Tap makes the Cube jump once.
+//               Press makes the Cube continuous jump, until the press released.
+//
+// A GameScene has a rushingCube, and a floor.
+// A floor should have three sets of obstacles.
+// The first set of obstacles stores the closest obstacles for clash checking, and second set stores the obstacles in front, and the third in back.
+//
+// On each frame, the GameScene calculates the new positions of all objects.
+// When a user makes a Tap, the state of the cube is updated and the cube should perform a jump.
+// When a user makes a Press, each time the cube launches from the jump, if the user has not yet release the press, then the cube will jump again.
+
+
+// Global var
+var viewWidth = CGFloat(0)
+var viewHeight = CGFloat(0)
+
 class GameScene: SKScene {
     
-    
-    var rushingCube: Cube = Cube()
-    var floor: Floor = Floor() // floor is an array of floorPieces.
+    var floor: Floor = Floor() // floor is the entry points of all nodes.
     
     
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        /*
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        self.addChild(myLabel)
-        */
-        
-        let viewWidth = CGRectGetWidth(self.frame)
-        let viewHeight = CGRectGetHeight(self.frame)
+        viewWidth = CGRectGetWidth(self.frame)
+        viewHeight = CGRectGetHeight(self.frame)
         
         println("\(viewWidth) \(viewHeight)")
         
-        
-        
-        rushingCube = Cube(color: UIColor.clearColor(), size: CGSize(width: viewWidth * RATIO_CUBE_WIDTH, height: viewHeight * RATIO_CUBE_HEIGHT))
-        rushingCube.position = CGPointMake(viewWidth * RATIO_CUBE_X, viewHeight * RATIO_CUBE_Y)
-    
-        println("rushingCube \(rushingCube.position.x) \(rushingCube.position.y) ")
-        self.addChild(rushingCube)
-        
-        
-        floor = Floor(width: viewWidth * RATIO_FLOOR_PIECE_WIDTH, height: viewHeight * RATIO_FLOOR_PIECE_HEIGHT)
-        var lineY = rushingCube.position.y - rushingCube.size.height / 2 - viewHeight * RATIO_FLOOR_LINE_HEIGHT / 2
-        var floorLine = floor.addLine(viewWidth / 2, y: lineY, width: viewWidth * RATIO_FLOOR_LINE_WIDTH, height: viewHeight * RATIO_FLOOR_LINE_HEIGHT)
-        self.addChild(floorLine)
-        
-        let loc_x = CGFloat(0)
-        let loc_y = floorLine.position.y - floorLine.size.height / 2 - viewHeight * RATIO_FLOOR_PIECE_HEIGHT / 2
-        let pieces = floor.fillPieces(loc_x, y: loc_y)
-        for piece in pieces {
-            self.addChild(piece)
+        // Init the floor
+        floor = Floor()
+        let nodes = floor.initialize()
+        for node in nodes {
+            self.addChild(node)
         }
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
-        rushingCube.userTapped()
-        
+        //floor.rushingCube.userTapped()
+        floor.rushingCube.userPressed()
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             println("loc \(location.x) \(location.y)")
             
             
-            /*
+            /* Sample animation
             let sprite = SKSpriteNode(imageNamed:"Spaceship")
             
             sprite.xScale = 0.5
@@ -79,12 +73,19 @@ class GameScene: SKScene {
             */
         }
     }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        floor.rushingCube.userPressReleased()
+        for touch: AnyObject in touches {
+            println("Touch ended!!!")
+        }
+    }
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-        rushingCube.jump()
-        if let newPiece = floor.update(3) {
-            self.addChild(newPiece)
+        let newNodes = floor.update(7)
+        for newNode in newNodes {
+            self.addChild(newNode)
         }
     }
 }
