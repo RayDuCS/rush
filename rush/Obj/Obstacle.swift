@@ -10,9 +10,11 @@ import Foundation
 import SpriteKit
 
 let RATIO_OBSTACLE_START_POS_X = CGFloat(0.7)
-let RATIO_OBSTACLE_TRIANGLE_WIDTH = CGFloat(0.07)
-let RATIO_OBSTACLE_TRIANGLE_HEIGHT = CGFloat(0.09)
-let RATIO_OBSTACLE_TRIANGLE_DISTANCE = CGFloat(0.4)
+let RATIO_OBSTACLE_TRIANGLE_CLASH_WIDTH = CGFloat(0.6)
+let RATIO_OBSTACLE_TRIANGLE_CLASH_HEIGHT = CGFloat(0.6)
+let RATIO_OBSTACLE_TRIANGLE_WIDTH = CGFloat(0.06)
+let RATIO_OBSTACLE_TRIANGLE_HEIGHT = CGFloat(0.08)
+let RATIO_OBSTACLE_TRIANGLE_DISTANCE = CGFloat(0.5)
 
 enum ObstacleType {
     case OBSTACLE_TYPE_TRIANGLE
@@ -38,7 +40,7 @@ class Obstacle : SKSpriteNode {
         self.init(texture:texture, color: UIColor.clearColor(), size: CGSize(width: 40, height: 40), type:.OBSTACLE_TYPE_TRIANGLE)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -48,6 +50,31 @@ class Obstacle : SKSpriteNode {
     
     func setFirstOfPattern() {
         firstOfPattern = true
+    }
+    
+    func setPosition(x:CGFloat, y:CGFloat) {
+        position.x = x
+        position.y = y
+        
+        var clashWidth = frame.width * RATIO_OBSTACLE_TRIANGLE_CLASH_WIDTH
+        var clashHeight = frame.height * RATIO_OBSTACLE_TRIANGLE_CLASH_HEIGHT
+        clashCheckFrame = CGRectMake(x - clashWidth / 2, y - clashHeight / 2, clashWidth, clashHeight)
+    }
+    
+    func move(x:CGFloat, y:CGFloat) {
+        position.x -= x
+        position.y -= y
+        clashCheckFrame.origin.x -= x
+        clashCheckFrame.origin.y -= y
+    }
+    
+    func setRelativePos(x:CGFloat, y:CGFloat) {
+        reviveRelativePosition.x = x
+        reviveRelativePosition.y = y
+    }
+    
+    func getRevivePoint() -> CGPoint {
+        return CGPointMake(reviveRelativePosition.x + position.x, reviveRelativePosition.y + position.y)
     }
     
     class var sampleTriangle: Obstacle {
@@ -101,6 +128,8 @@ class Obstacle : SKSpriteNode {
     
     var firstOfPattern = false
     var type: ObstacleType = .OBSTACLE_TYPE_TRIANGLE
+    var reviveRelativePosition = CGPointMake(0, 0)
+    var clashCheckFrame = CGRectMake(0, 0, 0, 0)
 }
 
 // The obstacle pattern. Generate the next obstacle on the fly
@@ -121,23 +150,26 @@ class ObstacleGenerator {
     }
     
     func generateObsThreeTriangle(x: CGFloat, y: CGFloat) -> [Obstacle] {
+        let distanceBetweenObsX = CGFloat(viewWidth * RATIO_OBSTACLE_TRIANGLE_DISTANCE)
         var obs: [Obstacle] = []
         var prevX = CGFloat(0)
         var prevY = CGFloat(0)
-        
         var firstObsTriangle = (Obstacle.sampleTriangle as Obstacle).copy() as Obstacle
         
         prevX = x + firstObsTriangle.size.width / 2
         prevY = firstObsTriangle.size.height / 2 + y
-        firstObsTriangle.position = CGPointMake(prevX, prevY)
+        firstObsTriangle.setPosition(prevX, y: prevY)
         firstObsTriangle.setFirstOfPattern()
+        firstObsTriangle.setRelativePos(2 * distanceBetweenObsX + 100, y: 0)
         obs.append(firstObsTriangle)
         
         for i in 1...2 {
-            prevX += viewWidth * RATIO_OBSTACLE_TRIANGLE_DISTANCE
+            prevX += distanceBetweenObsX
             
             var obsTriangle = (Obstacle.sampleTriangle as Obstacle).copy() as Obstacle
-            obsTriangle.position = CGPointMake(prevX, prevY)
+            obsTriangle.setPosition(prevX, y: prevY)
+            let distance = (CGFloat)(2 - i) * distanceBetweenObsX + 100
+            obsTriangle.setRelativePos(distance, y: 0)
             obs.append(obsTriangle)
         }
         

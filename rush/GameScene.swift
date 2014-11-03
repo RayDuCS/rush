@@ -22,6 +22,10 @@ import SpriteKit
 // On each frame, the GameScene calculates the new positions of all objects.
 // When a user makes a Tap, the state of the cube is updated and the cube should perform a jump.
 // When a user makes a Press, each time the cube launches from the jump, if the user has not yet release the press, then the cube will jump again.
+//
+// Every 5 frame, we check if the cube is clashed with a obstacle.
+// Each obstacle will have a body, which is used to check if the cube is interset with. This body
+// is smaller than the image of the obstacle.
 
 
 // Global var
@@ -45,6 +49,8 @@ class GameScene: SKScene {
         for node in nodes {
             self.addChild(node)
         }
+        
+        self.view?.ignoresSiblingOrder = true
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
