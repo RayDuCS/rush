@@ -33,7 +33,7 @@ class Floor {
         var newNodes: [SKSpriteNode] = []
         
         // init rushing cube
-        rushingCube = Cube(color: UIColor.clearColor())
+        rushingCube = Cube()
         rushingCube.zPosition = 1 //make sure cube is always getting rendered
         newNodes.append(rushingCube)
         
@@ -45,20 +45,37 @@ class Floor {
         }
         
         // init obstacles
-        obstaclesInFront = obstacleGenerator.generateObstables(viewWidth * RATIO_OBSTACLE_START_POS_X,
-                                                               y: CGRectGetMaxY(floorLine.frame))
-        for obs in obstaclesInFront {
-            newNodes.append(obs)
+        obstaclesInFront = []
+        for i in 1...2 {
+            var obstacles = obstacleGenerator.generateObstables(getStartingXForNewObstacle(),
+                y: CGRectGetMaxY(floorLine.frame))
+            for obs in obstacles {
+                obstaclesInFront.append(obs)
+                newNodes.append(obs)
+            }
         }
         
         
         return newNodes
     }
     
-    func advanceAllObj(x: CGFloat) {
+    func updateAllObj(x: CGFloat) -> [SKSpriteNode]{
+        var newNodes: [SKSpriteNode] = []
+        
         // Advance all obj by x, except the cube
         for piece in floorPieces {
             piece.position.x -= x
+        }
+        
+        if let piece = floorPieces.first {
+            if CGRectGetMaxX(piece.frame) <= 0 {
+                if let newPiece = self.addNextPiece() {
+                    floorPieces.removeAtIndex(0)
+                    piece.removeFromParent()
+                    
+                    newNodes.append(newPiece)
+                }
+            }
         }
         
         for obs in obstaclesPassed {
@@ -70,15 +87,59 @@ class Floor {
         for obs in obstaclesInFront {
             obs.move(x, y: 0)
         }
+        
+        // Move obs between slots.
+        // Will move all obstacles that fails the condition check.
+        while let obs = obstaclesInFront.first {
+            if CGRectGetMinX(obs.frame) <= CGRectGetMaxX(rushingCube.frame) + x {
+                obstaclesInFront.removeAtIndex(0)
+                obstaclesMayClash.append(obs)
+            } else {
+                break
+            }
+        }
+        
+        while let obs = obstaclesMayClash.first {
+            if CGRectGetMaxX(obs.frame) <= CGRectGetMinX(rushingCube.frame) {
+                obstaclesMayClash.removeAtIndex(0)
+                obstaclesPassed.append(obs)
+            } else {
+                break
+            }
+        }
+        
+        while let obs = obstaclesPassed.first {
+            if CGRectGetMaxX(obs.frame) <= 0 {
+                obstaclesPassed.removeAtIndex(0)
+                obs.removeFromParent()
+                if (obs.isFirstOfPattern()) {
+                    // add a new pattern to obstacles in front
+                    let newObss = obstacleGenerator.generateObstables(getStartingXForNewObstacle(), y: CGRectGetMaxY(floorLine.frame))
+                    for newObs in newObss {
+                        newNodes.append(newObs)
+                        obstaclesInFront.append(newObs)
+                    }
+                }
+            } else {
+                break
+            }
+        }
+        
+        return newNodes
     }
     
     func runClashCheck() {
-        if (frameNumber % 5 != 0) {
+        //if (frameNumber % 3 != 0) {
             // Perform the clash check every 10 frames.
+            //return
+        //}
+        
+        if (rushingCube.isClashed()) {
             return
         }
         
-        if (rushingCube.isClashed()) {
+        if obstaclesMayClash.isEmpty {
+            rushingCube.shallFall()
             return
         }
         
@@ -110,11 +171,13 @@ class Floor {
             return CGRectGetMaxX(obs.frame) + GAME_OBSTACLE_SAFE_DISTANCE
         }
         
-        return viewWidth
+        return viewWidth * RATIO_OBSTACLE_START_POS_X
     }
     
     // Invoked at each frame, update all nodes
     func update(speed: CGFloat) -> [SKSpriteNode] {
+        var newNodes: [SKSpriteNode] = []
+        
         // Update frameNumber
         frameNumber++
         frameNumber = frameNumber % 1000
@@ -122,80 +185,21 @@ class Floor {
         if (rushingCube.isClashed()) {
             restartCountdown--
             if (restartCountdown > 0) {
-                return [];
+                return newNodes;
             }
             
             // Restarting state
-            advanceAllObj(rushingCube.getAdvanceX())
-            rushingCube.revive()
+            newNodes = updateAllObj(rushingCube.getAdvanceX())
+            rushingCube.doRevive()
             restartCountdown = GAME_RESTART_COUNTDOWN
+            return newNodes
         }
-        
-        var newNodes: [SKSpriteNode] = []
         
         // Update cube
-        rushingCube.jump()
-        
+        rushingCube.update()
+        newNodes = updateAllObj(speed)
         // Update floor pieces.
-        for piece in floorPieces {
-            piece.position.x -= speed
-        }
-        
-        if let piece = floorPieces.first {
-            if CGRectGetMaxX(piece.frame) <= 0 {
-                if let newPiece = self.addNextPiece() {
-                    floorPieces.removeAtIndex(0)
-                    piece.removeFromParent()
-                    
-                    newNodes.append(newPiece)
-                }
-            }
-        }
-        
-        // Update obstacles.
-        for obs in obstaclesPassed {
-            obs.move(speed, y: 0)
-        }
-        
-        for obs in obstaclesMayClash {
-            obs.move(speed, y: 0)
-        }
-        
-        for obs in obstaclesInFront {
-            obs.move(speed, y: 0)
-            // may need to add to obstaclesMayClash
-        }
-        
-        // Move obs between slots.
-        if let obs = obstaclesInFront.first {
-            if CGRectGetMinX(obs.frame) <= CGRectGetMaxX(rushingCube.frame) + speed {
-                obstaclesInFront.removeAtIndex(0)
-                obstaclesMayClash.append(obs)
-            }
-        }
-        
-        if let obs = obstaclesMayClash.first {
-            if CGRectGetMaxX(obs.frame) <= CGRectGetMinX(rushingCube.frame) {
-                obstaclesMayClash.removeAtIndex(0)
-                obstaclesPassed.append(obs)
-            }
-        }
-        
-        if let obs = obstaclesPassed.first {
-            if CGRectGetMaxX(obs.frame) <= 0 {
-                obstaclesPassed.removeAtIndex(0)
-                obs.removeFromParent()
-                if (obs.isFirstOfPattern()) {
-                    // add a new pattern to obstacles in front
-                    let newObss = obstacleGenerator.generateObstables(getStartingXForNewObstacle(), y: CGRectGetMaxY(floorLine.frame))
-                    for newObs in newObss {
-                        newNodes.append(newObs)
-                        obstaclesInFront.append(newObs)
-                    }
-                }
-            }
-        }
-        
+                
         runClashCheck()
         
         return newNodes
@@ -259,7 +263,7 @@ class Floor {
         }
         
         dispatch_once(&Static.token) {
-            Static.instance = SKSpriteNode(color: UIColor.blueColor(), size: CGSize(width: 40, height: 40))
+            Static.instance = SKSpriteNode(color: UIColor.blackColor(), size: CGSize(width: 40, height: 40))
         }
         
         return Static.instance!

@@ -22,7 +22,7 @@ let RATIO_CUBE_Y = CGFloat(0.35)
 
 // CubeState describes the state of Cube
 enum CubeState {
-    case CUBESTATE_IDLE
+    case CUBESTATE_SLIDE
     case CUBESTATE_JUMPING
     case CUBESTATE_FALLING
     case CUBESTATE_CLASHED
@@ -30,26 +30,61 @@ enum CubeState {
 
 class Cube: SKSpriteNode {
     
-    init(color: UIColor!) {
+    override init() {
         //oldPos = CGPoint()
         let texture = SKTexture(imageNamed: "images.jpeg")
-        state = .CUBESTATE_IDLE
-        super.init(texture: texture, color: color,
+        state = .CUBESTATE_SLIDE
+        super.init(texture: texture, color: UIColor.clearColor(),
             size: CGSize(width: viewWidth * RATIO_CUBE_WIDTH, height: viewHeight * RATIO_CUBE_HEIGHT))
         position = CGPointMake(viewWidth * RATIO_CUBE_X, viewHeight * RATIO_CUBE_Y)
+        initialPos.x = position.x
+        initialPos.y = position.y
+        oldPos.x = position.x
+        oldPos.y = position.y
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    convenience override init() {
-        let texture = SKTexture(imageNamed: "images.jpeg")
-        self.init(color: UIColor.clearColor())
+    func doJump() {
+        // Can only do jump when sliding
+        if state != .CUBESTATE_SLIDE {
+            return
+        }
+        
+        oldPos.x = position.x
+        oldPos.y = position.y
+        state = .CUBESTATE_JUMPING
+        doAnimationRotation()
+    }
+    
+    func shallFall() {
+        if state == .CUBESTATE_SLIDE {
+            doFall()
+        }
+    }
+    
+    func doFall() {
+        state = .CUBESTATE_FALLING
+    }
+    
+    func stopFall(y: CGFloat) {
+        position.y = y
+        state = .CUBESTATE_SLIDE
+        stopAllAnimations()
+        
+        oldPos.x = position.x
+        oldPos.y = position.y
+        
+        // Jump again if pressed
+        if pressed {
+            doJump()
+        }
     }
     
     func userTapped() {
-        tapped = true;
+        doJump()
     }
     
     func userPressed() {
@@ -69,12 +104,11 @@ class Cube: SKSpriteNode {
         return (state == .CUBESTATE_CLASHED)
     }
     
-    func revive() {
+    func doRevive() {
         stopAnimationBurst()
         position.y = viewHeight * RATIO_CUBE_Y
         zRotation = 0
-        state = .CUBESTATE_IDLE
-        tapped = false
+        state = .CUBESTATE_SLIDE
         pressed = false
     }
     
@@ -83,9 +117,10 @@ class Cube: SKSpriteNode {
             return false
         }
         
-        // Compare both boundary, if any interset, then crash
-        //if intersectsNode(obs) && CGRectGetMinX(frame) <= CGRectGetMaxX(obs.frame) && CGRectGetMaxX(frame) >= CGRectGetMinX(obs.frame) {
-        if CGRectIntersectsRect(frame, obs.clashCheckFrame) {
+        let ret = obs.performClashCheck(self)
+        println("\(ret == .OBSTACLE_CLASH_TYPE_CLASHED)/\(ret == .OBSTACLE_CLASH_TYPE_OK)/\(ret == .OBSTACLE_CLASH_TYPE_OK_TO_FALL)")
+        switch (ret) {
+        case .OBSTACLE_CLASH_TYPE_CLASHED:
             state = .CUBESTATE_CLASHED
             revivePos = obs.getRevivePoint()
             
@@ -93,9 +128,28 @@ class Cube: SKSpriteNode {
             stopAllAnimations()
             doAnimationBurst()
             return true
+            
+        case .OBSTACLE_CLASH_TYPE_OK:
+            // The Obstacle does not clide, 3 possibilities
+            // 1. The cube is jumping or falling. - do nothing
+            // 2. The cube was sliding on top of a RectObstacle. - should fall
+            // 3. The cube is sliding and no action input yet. - do nothing
+            if state == .CUBESTATE_SLIDE && position.y > initialPos.y {
+                doFall()
+            }
+            
+            return false
+            
+        case .OBSTACLE_CLASH_TYPE_OK_TO_FALL:
+            // Only RectObstacle will return this code, this means the cube collide with the top of RectObstacle
+            // If the cube is not sliding, make it slide
+            if state != .CUBESTATE_SLIDE {
+                stopFall(CGRectGetMaxY(obs.frame) + frame.height / 2)
+            }
+            
+            return false
         }
         
-        return false
     }
     
     func doAnimationRotation() {
@@ -113,13 +167,13 @@ class Cube: SKSpriteNode {
     func doAnimationBurst() {
         var textures:[SKTexture] = []
         for i in 1...9 {
-            let imageName = "burst_0" + String(i) + ".jpg"
+            let imageName = "gl_burst_0" + String(i) + ".png"
             let texture = SKTexture(imageNamed: imageName)
             textures.append(texture)
         }
         
         for i in 10...24 {
-            let imageName = "burst_" + String(i) + ".jpg"
+            let imageName = "gl_burst_" + String(i) + ".png"
             let texture = SKTexture(imageNamed: imageName)
             textures.append(texture)
         }
@@ -140,22 +194,17 @@ class Cube: SKSpriteNode {
         stopAnimationBurst()
     }
     
-    func jump() {
-        if (!tapped) {
-            return
-        }
-        
+    
+    func update() {
         switch (state) {
-        case .CUBESTATE_IDLE:
-            state = .CUBESTATE_JUMPING
-            oldPos.x = position.x
-            oldPos.y = position.y
-            doAnimationRotation()
+        case .CUBESTATE_SLIDE:
+            // do nothing
+            break
             
         case .CUBESTATE_JUMPING:
             if (position.y + CUBE_JUMP_SPEED > oldPos.y + CUBE_JUMP_HEIGHT_MAX ) {
                 // Time to fall
-                state = .CUBESTATE_FALLING
+                doFall()
                 position.y -= CUBE_JUMP_SPEED
             } else {
                 position.y += CUBE_JUMP_SPEED
@@ -163,15 +212,9 @@ class Cube: SKSpriteNode {
             
             
         case .CUBESTATE_FALLING:
-            if position.y - CUBE_JUMP_SPEED < oldPos.y {
+            if position.y - CUBE_JUMP_SPEED < initialPos.y {
                 // Done falling
-                position.y = oldPos.y
-                state = .CUBESTATE_IDLE
-                stopAllAnimations()
-                if !pressed {
-                    tapped = false
-                }
-                
+                stopFall(initialPos.y)
             } else {
                 position.y -= CUBE_JUMP_SPEED
             }
@@ -185,9 +228,9 @@ class Cube: SKSpriteNode {
     }
     
     var oldPos: CGPoint = CGPoint()
+    var initialPos: CGPoint = CGPoint()
     var revivePos: CGPoint = CGPoint()
-    var state: CubeState = .CUBESTATE_IDLE
-    var tapped = false
+    var state: CubeState = .CUBESTATE_SLIDE
     var pressed = false
     var restartCountdown = 60
 }
