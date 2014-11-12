@@ -31,6 +31,7 @@ import SpriteKit
 // Global var
 var viewWidth = CGFloat(0)
 var viewHeight = CGFloat(0)
+var moveSpeed = CGFloat(7)
 
 class GameScene: SKScene {
     
@@ -43,6 +44,7 @@ class GameScene: SKScene {
         
         println("\(viewWidth) \(viewHeight)")
         
+        self.view?.ignoresSiblingOrder = true
         // Init the floor
         floor = Floor()
         let nodes = floor.initialize()
@@ -50,33 +52,14 @@ class GameScene: SKScene {
             self.addChild(node)
         }
         
-        self.view?.ignoresSiblingOrder = true
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
-        
-        //floor.rushingCube.userTapped()
         floor.rushingCube.userPressed()
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             println("loc \(location.x) \(location.y)")
-            
-            
-            /* Sample animation
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-            
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
-            
-            
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-            
-            sprite.runAction(SKAction.repeatActionForever(action))
-            
-            self.addChild(sprite)
-            */
         }
     }
     
@@ -89,7 +72,7 @@ class GameScene: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-        let newNodes = floor.update(7)
+        let newNodes = floor.update(moveSpeed)
         for newNode in newNodes {
             self.addChild(newNode)
         }

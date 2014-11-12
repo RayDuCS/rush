@@ -9,6 +9,11 @@
 import Foundation
 import SpriteKit
 
+let ZPOSITION_CUBE = CGFloat(4)
+let ZPOSITION_OBSTACLE = CGFloat(3)
+let ZPOSITION_PATH = CGFloat(2)
+let ZPOSITION_BACKGROUND = CGFloat(1)
+
 let RATIO_FLOOR_PIECE_WIDTH = CGFloat(0.02)
 let RATIO_FLOOR_PIECE_HEIGHT = CGFloat(0.01)
 let RATIO_FLOOR_PIECE_X = CGFloat(0.4)
@@ -22,11 +27,7 @@ let GAME_OBSTACLE_SAFE_DISTANCE = CGFloat(500)
 class Floor {
     
     init () {
-        floorPieces = []
-        Floor.sampleFloorPiece.size = CGSize(width: viewWidth * RATIO_FLOOR_PIECE_WIDTH,
-                                             height: viewHeight * RATIO_FLOOR_PIECE_HEIGHT)
     }
-    
     
     // Initialize the floor, returns a set of nodes to be added
     func initialize() -> [SKSpriteNode] {
@@ -34,15 +35,10 @@ class Floor {
         
         // init rushing cube
         rushingCube = Cube()
-        rushingCube.zPosition = 1 //make sure cube is always getting rendered
         newNodes.append(rushingCube)
         
         // init floor line
         newNodes.append(addLine())
-        let pieces = fillPieces()
-        for piece in pieces {
-            newNodes.append(piece)
-        }
         
         // init obstacles
         obstaclesInFront = []
@@ -56,36 +52,34 @@ class Floor {
         }
         
         
+        // Add paths
+        var firstPath = GamePath()
+        firstPath.position.x = firstPath.size.width / 2
+        firstPath.position.y = firstPath.size.height / 2
+        paths.append(firstPath)
+        newNodes.append(firstPath)
+        var secondPath = firstPath.addNextPath()
+        paths.append(secondPath)
+        newNodes.append(secondPath)
+        
+        
         return newNodes
     }
     
     func updateAllObj(x: CGFloat) -> [SKSpriteNode]{
         var newNodes: [SKSpriteNode] = []
         
-        // Advance all obj by x, except the cube
-        for piece in floorPieces {
-            piece.position.x -= x
-        }
-        
-        if let piece = floorPieces.first {
-            if CGRectGetMaxX(piece.frame) <= 0 {
-                if let newPiece = self.addNextPiece() {
-                    floorPieces.removeAtIndex(0)
-                    piece.removeFromParent()
-                    
-                    newNodes.append(newPiece)
-                }
-            }
-        }
+        // Advance all nodes by x
+        rushingCube.update(x)
         
         for obs in obstaclesPassed {
-            obs.move(x, y: 0)
+            obs.update(x)
         }
         for obs in obstaclesMayClash {
-            obs.move(x, y: 0)
+            obs.update(x)
         }
         for obs in obstaclesInFront {
-            obs.move(x, y: 0)
+            obs.update(x)
         }
         
         // Move obs between slots.
@@ -120,6 +114,23 @@ class Floor {
                         obstaclesInFront.append(newObs)
                     }
                 }
+            } else {
+                break
+            }
+        }
+        
+        // Update path
+        for path in paths {
+            path.update(x)
+        }
+        
+        while let path = paths.first {
+            if CGRectGetMaxX(path.frame) <= 0 {
+                paths.removeAtIndex(0)
+                path.removeFromParent()
+                let newPath = paths.last!.addNextPath()
+                newNodes.append(newPath)
+                paths.append(newPath)
             } else {
                 break
             }
@@ -196,7 +207,6 @@ class Floor {
         }
         
         // Update cube
-        rushingCube.update()
         newNodes = updateAllObj(speed)
         // Update floor pieces.
                 
@@ -217,59 +227,10 @@ class Floor {
         
         return floorLine
     }
+
+    var backgrounds: [GameBackground] = [] // the backgrounds
+    var paths: [GamePath] = [] // the paths
     
-    func fillPieces() -> [SKSpriteNode] {
-        let x = CGFloat(0)
-        let y = floorLine.position.y - floorLine.size.height / 2 - viewHeight * RATIO_FLOOR_PIECE_HEIGHT / 2
-        let amount = Int(1 / RATIO_FLOOR_PIECE_WIDTH)
-        
-        addPiece(x, y: y)
-        for i in 1...(amount - 1) {
-            addNextPiece()
-        }
-        
-        return floorPieces
-    }
-    
-    func addPiece(x: CGFloat, y: CGFloat) -> SKSpriteNode {
-        var piece = (Floor.sampleFloorPiece as SKSpriteNode).copy() as SKSpriteNode
-        piece.position.x = x
-        piece.position.y = y
-        
-        floorPieces.append(piece)
-        
-        return piece
-    }
-    
-    func addNextPiece() -> SKSpriteNode? {
-        if let lastPiece = floorPieces.last {
-            let nextPiece = (Floor.sampleFloorPiece as SKSpriteNode).copy() as SKSpriteNode
-            
-            nextPiece.position.x = lastPiece.position.x + Floor.sampleFloorPiece.size.width + 50
-            nextPiece.position.y = lastPiece.position.y
-            floorPieces.append(nextPiece)
-            return nextPiece
-        }
-        
-        return nil
-    }
-    
-    
-    
-    class var sampleFloorPiece: SKSpriteNode {
-    struct Static {
-        static var instance: SKSpriteNode?
-        static var token: dispatch_once_t = 0
-        }
-        
-        dispatch_once(&Static.token) {
-            Static.instance = SKSpriteNode(color: UIColor.blackColor(), size: CGSize(width: 40, height: 40))
-        }
-        
-        return Static.instance!
-    }
-    
-    var floorPieces: [SKSpriteNode] = [] // the moving pieces under the floor.
     var floorLine: SKSpriteNode = SKSpriteNode() // the floor
     var rushingCube: Cube = Cube() // the cube.
     

@@ -15,9 +15,10 @@ let RATIO_OBSTACLE_TRIANGLE_CLASH_HEIGHT = CGFloat(0.6)
 let RATIO_OBSTACLE_TRIANGLE_WIDTH = CGFloat(0.06)
 let RATIO_OBSTACLE_TRIANGLE_HEIGHT = CGFloat(0.08)
 let RATIO_OBSTACLE_TRIANGLE_DISTANCE = CGFloat(0.5)
-let RATIO_OBSTACLE_RECT_DISTANCE = CGFloat(0.5)
+let RATIO_OBSTACLE_RECT_DISTANCE = CGFloat(0.21)
 let RATIO_OBSTACLE_RECT_WIDTH = CGFloat(0.06)
 let RATIO_OBSTACLE_RECT_HEIGHT = CGFloat(0.08)
+let RATIO_OBSTACLE_RECT_HEIGHT_INCR = CGFloat(0.06)
 let RATIO_OBSTACLE_RECT_CLASH_SAFEZONE = CGFloat(0.02)
 let RATIO_OBSTACLE_RECT_CLASH_WIDTH = CGFloat(0.6)
 let RATIO_OBSTACLE_RECT_CLASH_HEIGHT = CGFloat(0.6)
@@ -40,11 +41,12 @@ enum ObstacleClashType {
     case OBSTACLE_CLASH_TYPE_OK_TO_FALL
 }
 
-class Obstacle : SKSpriteNode {
+class Obstacle : GameNode {
     init(texture: SKTexture, size: CGSize, type: ObstacleType) {
         //oldPos = CGPoint()
         self.type = type
-        super.init(texture: texture, color: UIColor.clearColor(), size: size)
+        super.init(texture: texture, size: size)
+        self.zPosition = ZPOSITION_OBSTACLE
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -68,11 +70,9 @@ class Obstacle : SKSpriteNode {
         clashCheckFrame = CGRectMake(x - clashWidth / 2, y - clashHeight / 2, clashWidth, clashHeight)
     }
     
-    func move(x:CGFloat, y:CGFloat) {
+    override func update(x: CGFloat) {
         position.x -= x
-        position.y -= y
         clashCheckFrame.origin.x -= x
-        clashCheckFrame.origin.y -= y
     }
     
     func setRelativePos(x:CGFloat, y:CGFloat) {
@@ -119,7 +119,7 @@ class ObstacleTriangle: Obstacle {
 class ObstacleBackTriangle: Obstacle {
     init() {
         //oldPos = CGPoint()
-        let texture = SKTexture(imageNamed: "back_triangle.png")
+        let texture = SKTexture(imageNamed: "inversetriangle.png")
         super.init(texture: texture,
             size: CGSize(width: viewWidth * RATIO_OBSTACLE_TRIANGLE_WIDTH, height: viewHeight * RATIO_OBSTACLE_TRIANGLE_HEIGHT),
             type: .OBSTACLE_TYPE_BACK_TRIANGLE)
@@ -137,11 +137,14 @@ class ObstacleBackTriangle: Obstacle {
 
 class ObstacleRect: Obstacle {
     
-    init() {
-        //oldPos = CGPoint()
-        let texture = SKTexture(imageNamed: "rect.jpeg")
+    convenience init() {
+        let texture = SKTexture(imageNamed: "rectangular.png")
+        self.init(texture:texture, height: viewHeight * RATIO_OBSTACLE_RECT_HEIGHT)
+    }
+    
+    init(texture: SKTexture, height: CGFloat) {
         super.init(texture: texture,
-            size: CGSize(width: viewWidth * RATIO_OBSTACLE_RECT_WIDTH, height: viewHeight * RATIO_OBSTACLE_RECT_HEIGHT),
+            size: CGSize(width: viewWidth * RATIO_OBSTACLE_RECT_WIDTH, height: height),
             type: .OBSTACLE_TYPE_RECT)
     }
     
@@ -233,11 +236,13 @@ class ObstacleGenerator {
         firstObsRect.setRelativePos(2 * distanceBetweenObsX + 100, y: 0)
         obs.append(firstObsRect)
         
-        var y_scale = CGFloat(2)
         for i in 1...2 {
-            var obsRect = ObstacleRect()
+            var texture = SKTexture(imageNamed: "rectangular.png")
+            var height_incr_ratio = RATIO_OBSTACLE_RECT_HEIGHT_INCR * CGFloat(i)
+            var height = viewHeight * (RATIO_OBSTACLE_RECT_HEIGHT + height_incr_ratio)
+            
+            var obsRect = ObstacleRect(texture: texture, height: height)
             obsRect.type = .OBSTACLE_TYPE_RECT
-            obsRect.yScale = y_scale // resize the rect
             
             prevX += distanceBetweenObsX
             prevY = obsRect.size.height / 2 + y
@@ -245,7 +250,6 @@ class ObstacleGenerator {
             let distance = (CGFloat)(2 - i) * distanceBetweenObsX + 100
             obsRect.setRelativePos(distance, y: 0)
             obs.append(obsRect)
-            y_scale++
         }
         
         

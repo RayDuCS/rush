@@ -9,14 +9,15 @@
 import Foundation
 import SpriteKit
 
-let CUBE_JUMP_HEIGHT_MAX = CGFloat(200.0)
 let CUBE_JUMP_SPEED = CGFloat(8.0)
+let CUBE_JUMP_HEIGHT_MAX = CGFloat(0.25) * viewHeight
 let CUBE_ANIMATION_ROTATION_TIME = (CUBE_JUMP_HEIGHT_MAX / CUBE_JUMP_SPEED * 2 / 60)
 let CUBE_ANIMATION_ROTATION_KEY = "CUBE_ANIMATION_ROTATION_KEY"
 let CUBE_ANIMATION_BURST_KEY = "CUBE_ANIMATION_BURST_KEY"
 
+
 let RATIO_CUBE_WIDTH = CGFloat(0.06)
-let RATIO_CUBE_HEIGHT = CGFloat(0.08)
+let RATIO_CUBE_HEIGHT = CGFloat(0.10)
 let RATIO_CUBE_X = CGFloat(0.3)
 let RATIO_CUBE_Y = CGFloat(0.35)
 
@@ -28,19 +29,23 @@ enum CubeState {
     case CUBESTATE_CLASHED
 }
 
-class Cube: SKSpriteNode {
+class Cube: GameNode {
     
-    override init() {
+    init() {
         //oldPos = CGPoint()
-        let texture = SKTexture(imageNamed: "images.jpeg")
+        let texture = SKTexture(imageNamed: "images.png")
+        let size = CGSize(width: viewWidth * RATIO_CUBE_WIDTH,
+            height: viewHeight * RATIO_CUBE_HEIGHT)
+        
+        super.init(texture: texture, size: size)
+        
         state = .CUBESTATE_SLIDE
-        super.init(texture: texture, color: UIColor.clearColor(),
-            size: CGSize(width: viewWidth * RATIO_CUBE_WIDTH, height: viewHeight * RATIO_CUBE_HEIGHT))
         position = CGPointMake(viewWidth * RATIO_CUBE_X, viewHeight * RATIO_CUBE_Y)
         initialPos.x = position.x
         initialPos.y = position.y
         oldPos.x = position.x
         oldPos.y = position.y
+        zPosition = ZPOSITION_CUBE
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,6 +55,7 @@ class Cube: SKSpriteNode {
     func doJump() {
         // Can only do jump when sliding
         if state != .CUBESTATE_SLIDE {
+            println("Can't jump now \(state == .CUBESTATE_JUMPING) \(state == .CUBESTATE_FALLING) \(state == .CUBESTATE_CLASHED)")
             return
         }
         
@@ -60,7 +66,8 @@ class Cube: SKSpriteNode {
     }
     
     func shallFall() {
-        if state == .CUBESTATE_SLIDE {
+        // Only fall if the cube is sliding.
+        if state == .CUBESTATE_SLIDE && position.y > initialPos.y {
             doFall()
         }
     }
@@ -118,7 +125,7 @@ class Cube: SKSpriteNode {
         }
         
         let ret = obs.performClashCheck(self)
-        println("\(ret == .OBSTACLE_CLASH_TYPE_CLASHED)/\(ret == .OBSTACLE_CLASH_TYPE_OK)/\(ret == .OBSTACLE_CLASH_TYPE_OK_TO_FALL)")
+        //println("\(ret == .OBSTACLE_CLASH_TYPE_CLASHED)/\(ret == .OBSTACLE_CLASH_TYPE_OK)/\(ret == .OBSTACLE_CLASH_TYPE_OK_TO_FALL)")
         switch (ret) {
         case .OBSTACLE_CLASH_TYPE_CLASHED:
             state = .CUBESTATE_CLASHED
@@ -185,7 +192,7 @@ class Cube: SKSpriteNode {
     func stopAnimationBurst() {
         removeActionForKey(CUBE_ANIMATION_BURST_KEY)
         size = CGSizeMake(viewWidth * RATIO_CUBE_WIDTH, viewHeight * RATIO_CUBE_HEIGHT)
-        texture = SKTexture(imageNamed: "images.jpeg")
+        texture = SKTexture(imageNamed: "images.png")
     }
     
     
@@ -195,7 +202,7 @@ class Cube: SKSpriteNode {
     }
     
     
-    func update() {
+    override func update(x: CGFloat) {
         switch (state) {
         case .CUBESTATE_SLIDE:
             // do nothing

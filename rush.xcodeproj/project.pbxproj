@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F686A1E1A10076E0037E728 /* images.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A1D1A10076E0037E728 /* images.png */; };
+		0F686A201A1007CF0037E728 /* rectangular.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A1F1A1007CF0037E728 /* rectangular.png */; };
+		0F686A271A1008420037E728 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A211A1008420037E728 /* background.png */; };
+		0F686A281A1008420037E728 /* inversetriangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A221A1008420037E728 /* inversetriangle.png */; };
+		0F686A291A1008420037E728 /* path.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A231A1008420037E728 /* path.png */; };
+		0F686A2A1A1008420037E728 /* shadow_full_jump.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A241A1008420037E728 /* shadow_full_jump.png */; };
+		0F686A2B1A1008420037E728 /* shadow_half_jump.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A251A1008420037E728 /* shadow_half_jump.png */; };
+		0F686A2C1A1008420037E728 /* shadow_landing.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F686A261A1008420037E728 /* shadow_landing.png */; };
+		0F686A2E1A1052120037E728 /* GameNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F686A2D1A1052120037E728 /* GameNode.swift */; };
 		0FA94A7B1A0EE7DC0008011A /* gl_burst_01.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA94A691A0EE7DC0008011A /* gl_burst_01.png */; };
 		0FA94A7C1A0EE7DC0008011A /* gl_burst_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA94A6A1A0EE7DC0008011A /* gl_burst_02.png */; };
 		0FA94A7D1A0EE7DC0008011A /* gl_burst_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA94A6B1A0EE7DC0008011A /* gl_burst_03.png */; };
@@ -32,12 +41,9 @@
 		0FA94A971A0F1E380008011A /* gl_burst_16.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA94A911A0F1E380008011A /* gl_burst_16.png */; };
 		0FA94A981A0F1E380008011A /* gl_burst_17.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA94A921A0F1E380008011A /* gl_burst_17.png */; };
 		0FD68F1C19FC1A4600173A88 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD68F1B19FC1A4600173A88 /* Obstacle.swift */; };
-		0FD68F2019FC217E00173A88 /* back_triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FD68F1D19FC217E00173A88 /* back_triangle.png */; };
-		0FD68F2119FC217E00173A88 /* rect.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 0FD68F1E19FC217E00173A88 /* rect.jpeg */; };
 		0FD68F2219FC217E00173A88 /* triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FD68F1F19FC217E00173A88 /* triangle.png */; };
 		0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B519F0C9CC000E0CAB /* Cube.swift */; };
 		0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDCB1B619F0C9CC000E0CAB /* Floor.swift */; };
-		0FDCB1BB19F0EBCB000E0CAB /* images.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */; };
 		0FE97ABD19D542A500B20FCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97ABC19D542A500B20FCD /* AppDelegate.swift */; };
 		0FE97ABF19D542A500B20FCD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0FE97ABE19D542A500B20FCD /* GameScene.sks */; };
 		0FE97AC119D542A500B20FCD /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97AC019D542A500B20FCD /* GameScene.swift */; };
@@ -59,6 +65,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F686A1D1A10076E0037E728 /* images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = images.png; path = Images/images.png; sourceTree = "<group>"; };
+		0F686A1F1A1007CF0037E728 /* rectangular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rectangular.png; path = Images/rectangular.png; sourceTree = "<group>"; };
+		0F686A211A1008420037E728 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/background.png; sourceTree = "<group>"; };
+		0F686A221A1008420037E728 /* inversetriangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = inversetriangle.png; path = Images/inversetriangle.png; sourceTree = "<group>"; };
+		0F686A231A1008420037E728 /* path.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = path.png; path = Images/path.png; sourceTree = "<group>"; };
+		0F686A241A1008420037E728 /* shadow_full_jump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shadow_full_jump.png; path = Images/shadow_full_jump.png; sourceTree = "<group>"; };
+		0F686A251A1008420037E728 /* shadow_half_jump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shadow_half_jump.png; path = Images/shadow_half_jump.png; sourceTree = "<group>"; };
+		0F686A261A1008420037E728 /* shadow_landing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shadow_landing.png; path = Images/shadow_landing.png; sourceTree = "<group>"; };
+		0F686A2D1A1052120037E728 /* GameNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameNode.swift; path = Obj/GameNode.swift; sourceTree = "<group>"; };
 		0FA94A691A0EE7DC0008011A /* gl_burst_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gl_burst_01.png; path = Images/burst/gl_burst_01.png; sourceTree = "<group>"; };
 		0FA94A6A1A0EE7DC0008011A /* gl_burst_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gl_burst_02.png; path = Images/burst/gl_burst_02.png; sourceTree = "<group>"; };
 		0FA94A6B1A0EE7DC0008011A /* gl_burst_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gl_burst_03.png; path = Images/burst/gl_burst_03.png; sourceTree = "<group>"; };
@@ -84,12 +99,9 @@
 		0FA94A911A0F1E380008011A /* gl_burst_16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gl_burst_16.png; path = Images/burst/gl_burst_16.png; sourceTree = "<group>"; };
 		0FA94A921A0F1E380008011A /* gl_burst_17.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gl_burst_17.png; path = Images/burst/gl_burst_17.png; sourceTree = "<group>"; };
 		0FD68F1B19FC1A4600173A88 /* Obstacle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Obstacle.swift; path = Obj/Obstacle.swift; sourceTree = "<group>"; };
-		0FD68F1D19FC217E00173A88 /* back_triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back_triangle.png; path = Images/back_triangle.png; sourceTree = "<group>"; };
-		0FD68F1E19FC217E00173A88 /* rect.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = rect.jpeg; path = Images/rect.jpeg; sourceTree = "<group>"; };
 		0FD68F1F19FC217E00173A88 /* triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = triangle.png; path = Images/triangle.png; sourceTree = "<group>"; };
 		0FDCB1B519F0C9CC000E0CAB /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cube.swift; path = Obj/Cube.swift; sourceTree = "<group>"; };
 		0FDCB1B619F0C9CC000E0CAB /* Floor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Floor.swift; path = Obj/Floor.swift; sourceTree = "<group>"; };
-		0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = images.jpeg; path = Images/images.jpeg; sourceTree = "<group>"; };
 		0FE97AB719D542A500B20FCD /* rush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE97ABB19D542A500B20FCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0FE97ABC19D542A500B20FCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +171,7 @@
 				0FDCB1B519F0C9CC000E0CAB /* Cube.swift */,
 				0FDCB1B619F0C9CC000E0CAB /* Floor.swift */,
 				0FD68F1B19FC1A4600173A88 /* Obstacle.swift */,
+				0F686A2D1A1052120037E728 /* GameNode.swift */,
 			);
 			name = Obj;
 			sourceTree = "<group>";
@@ -166,11 +179,16 @@
 		0FDCB1B919F0EB9A000E0CAB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0F686A211A1008420037E728 /* background.png */,
+				0F686A221A1008420037E728 /* inversetriangle.png */,
+				0F686A231A1008420037E728 /* path.png */,
+				0F686A241A1008420037E728 /* shadow_full_jump.png */,
+				0F686A251A1008420037E728 /* shadow_half_jump.png */,
+				0F686A261A1008420037E728 /* shadow_landing.png */,
+				0F686A1F1A1007CF0037E728 /* rectangular.png */,
+				0F686A1D1A10076E0037E728 /* images.png */,
 				0F71863A1A06EA160092CAF3 /* burst */,
-				0FD68F1D19FC217E00173A88 /* back_triangle.png */,
-				0FD68F1E19FC217E00173A88 /* rect.jpeg */,
 				0FD68F1F19FC217E00173A88 /* triangle.png */,
-				0FDCB1BA19F0EBCB000E0CAB /* images.jpeg */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -316,8 +334,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FD68F2019FC217E00173A88 /* back_triangle.png in Resources */,
 				0FA94A7C1A0EE7DC0008011A /* gl_burst_02.png in Resources */,
+				0F686A2A1A1008420037E728 /* shadow_full_jump.png in Resources */,
 				0FA94A841A0EE7DC0008011A /* gl_burst_10.png in Resources */,
 				0FA94A7D1A0EE7DC0008011A /* gl_burst_03.png in Resources */,
 				0FE97ACB19D542A500B20FCD /* LaunchScreen.xib in Resources */,
@@ -331,22 +349,27 @@
 				0FA94A961A0F1E380008011A /* gl_burst_15.png in Resources */,
 				0FA94A861A0EE7DC0008011A /* gl_burst_18.png in Resources */,
 				0FA94A931A0F1E380008011A /* gl_burst_12.png in Resources */,
-				0FDCB1BB19F0EBCB000E0CAB /* images.jpeg in Resources */,
 				0FE97AC819D542A500B20FCD /* Images.xcassets in Resources */,
 				0FE97ABF19D542A500B20FCD /* GameScene.sks in Resources */,
 				0FA94A881A0EE7DC0008011A /* gl_burst_20.png in Resources */,
 				0FD68F2219FC217E00173A88 /* triangle.png in Resources */,
-				0FD68F2119FC217E00173A88 /* rect.jpeg in Resources */,
+				0F686A1E1A10076E0037E728 /* images.png in Resources */,
 				0FA94A821A0EE7DC0008011A /* gl_burst_08.png in Resources */,
+				0F686A2B1A1008420037E728 /* shadow_half_jump.png in Resources */,
 				0FA94A941A0F1E380008011A /* gl_burst_13.png in Resources */,
 				0FA94A811A0EE7DC0008011A /* gl_burst_07.png in Resources */,
 				0FA94A801A0EE7DC0008011A /* gl_burst_06.png in Resources */,
+				0F686A281A1008420037E728 /* inversetriangle.png in Resources */,
 				0FE97AC619D542A500B20FCD /* Main.storyboard in Resources */,
 				0FA94A8B1A0EE7DC0008011A /* gl_burst_23.png in Resources */,
+				0F686A201A1007CF0037E728 /* rectangular.png in Resources */,
 				0FA94A851A0EE7DC0008011A /* gl_burst_11.png in Resources */,
+				0F686A2C1A1008420037E728 /* shadow_landing.png in Resources */,
 				0FA94A8C1A0EE7DC0008011A /* gl_burst_24.png in Resources */,
 				0FA94A971A0F1E380008011A /* gl_burst_16.png in Resources */,
+				0F686A291A1008420037E728 /* path.png in Resources */,
 				0FA94A7E1A0EE7DC0008011A /* gl_burst_04.png in Resources */,
+				0F686A271A1008420037E728 /* background.png in Resources */,
 				0FA94A8A1A0EE7DC0008011A /* gl_burst_22.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +391,7 @@
 				0FDCB1B719F0C9CC000E0CAB /* Cube.swift in Sources */,
 				0FE97AC119D542A500B20FCD /* GameScene.swift in Sources */,
 				0FD68F1C19FC1A4600173A88 /* Obstacle.swift in Sources */,
+				0F686A2E1A1052120037E728 /* GameNode.swift in Sources */,
 				0FDCB1B819F0C9CC000E0CAB /* Floor.swift in Sources */,
 				0FE97AC319D542A500B20FCD /* GameViewController.swift in Sources */,
 				0FE97ABD19D542A500B20FCD /* AppDelegate.swift in Sources */,
