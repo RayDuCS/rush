@@ -52,36 +52,58 @@ class Floor {
         }
         
         // Add bgs
-        var first_bg = GameBackground()
-        first_bg.position.x = first_bg.size.width / 2
-        first_bg.position.y = first_bg.size.height / 2
+        var first_bg = GameBackgroundPath()
+        var second_bg = initPathObj(first_bg, position_y: first_bg.size.height/2)
         bgs.append(first_bg)
-        newNodes.append(first_bg)
-        var second_bg = first_bg.addNextBackground()
         bgs.append(second_bg)
+        newNodes.append(first_bg)
         newNodes.append(second_bg)
         
+        
         // Add paths
-        var firstPath = GamePath()
-        firstPath.position.x = firstPath.size.width / 2
-        firstPath.position.y = firstPath.size.height / 2
-        paths.append(firstPath)
-        newNodes.append(firstPath)
-        var secondPath = firstPath.addNextPath()
-        paths.append(secondPath)
-        newNodes.append(secondPath)
+        var first_path = GamePath()
+        var second_path = initPathObj(first_path, position_y: first_path.size.height/2)
+        paths.append(first_path)
+        paths.append(second_path)
+        newNodes.append(first_path)
+        newNodes.append(second_path)
         
         // Add stone paths
-        var firstStonePath = GameStonePath()
-        firstStonePath.position.x = firstStonePath.size.width / 2
-        firstStonePath.position.y = RATIO_PATH_STONE_HEIGHT * viewHeight / 2
-        paths_stone.append(firstStonePath)
-        newNodes.append(firstStonePath)
-        var secondStonePath = firstStonePath.addNextPath()
-        paths_stone.append(secondStonePath)
-        newNodes.append(secondStonePath)
+        var first_stone_path = GameStonePath()
+        var second_stone_path = initPathObj(first_stone_path, position_y:RATIO_PATH_STONE_HEIGHT * viewHeight / 2)
+        paths_stone.append(first_stone_path)
+        paths_stone.append(second_stone_path)
+        newNodes.append(first_stone_path)
+        newNodes.append(second_stone_path)
         
         return newNodes
+    }
+    
+    // init the path objs, return the 2nd path obj
+    func initPathObj(node: GamePath, position_y: CGFloat) -> GamePath {
+        node.position.x = node.size.width / 2
+        node.position.y = position_y
+        return node.addNextNode()
+    }
+    
+    
+    func updatePathObj(nodes: [GamePath], speed: CGFloat) -> (GamePath?, [GamePath]) {
+        for node in nodes {
+            node.update(speed)
+        }
+        
+        if let node = nodes.first {
+            if CGRectGetMaxX(node.frame) <= 0 {
+                var mutable_nodes = nodes
+                let new_node = nodes.last!.addNextNode()
+                
+                mutable_nodes.removeAtIndex(0)
+                mutable_nodes.append(new_node)
+                return (new_node, mutable_nodes)
+            }
+        }
+
+        return (nil, nodes)
     }
     
     func updateAllObj(x: CGFloat) -> [SKSpriteNode]{
@@ -137,59 +159,23 @@ class Floor {
             }
         }
         
-        // Update bg
-        for bg in bgs {
-            if x < 2 {
-                bg.update(2)
-            } else {
-                bg.update(x - 2)
-            }
+        let (new_bg, new_bgs) = updatePathObj(bgs, speed: 2)
+        if new_bg != nil {
+            bgs = new_bgs
+            newNodes.append(new_bg!)
         }
         
-        while let bg = bgs.first {
-            if CGRectGetMaxX(bg.frame) <= 0 {
-                bgs.removeAtIndex(0)
-                bg.removeFromParent()
-                let new_bg = bgs.last!.addNextBackground()
-                newNodes.append(new_bg)
-                bgs.append(new_bg)
-            } else {
-                break
-            }
+        
+        let (new_path, new_paths) = updatePathObj(paths, speed: x)
+        if new_path != nil {
+            paths = new_paths
+            newNodes.append(new_path!)
         }
         
-        // Update path
-        for path in paths {
-            path.update(x)
-        }
-        
-        while let path = paths.first {
-            if CGRectGetMaxX(path.frame) <= 0 {
-                paths.removeAtIndex(0)
-                path.removeFromParent()
-                let newPath = paths.last!.addNextPath()
-                newNodes.append(newPath)
-                paths.append(newPath)
-            } else {
-                break
-            }
-        }
-        
-        // Update stone path
-        for path in paths_stone {
-            path.update(x + 3)
-        }
-        
-        while let path = paths_stone.first {
-            if CGRectGetMaxX(path.frame) <= 0 {
-                paths_stone.removeAtIndex(0)
-                path.removeFromParent()
-                let newPath = paths_stone.last!.addNextPath()
-                newNodes.append(newPath)
-                paths_stone.append(newPath)
-            } else {
-                break
-            }
+        let (new_path_stone, new_paths_stone) = updatePathObj(paths_stone, speed: x+3)
+        if new_path_stone != nil {
+            paths_stone = new_paths_stone
+            newNodes.append(new_path_stone!)
         }
         
         return newNodes
@@ -284,9 +270,9 @@ class Floor {
         return floorLine
     }
 
-    var bgs: [GameBackground] = [] // the backgrounds
+    var bgs: [GamePath] = [] // the backgrounds
     var paths: [GamePath] = [] // the paths
-    var paths_stone: [GameStonePath] = [] // the stone paths
+    var paths_stone: [GamePath] = [] // the stone paths
     
     var floorLine: SKSpriteNode = SKSpriteNode() // the floor
     var rushingCube: Cube = Cube() // the cube.

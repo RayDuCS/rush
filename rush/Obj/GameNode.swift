@@ -25,40 +25,6 @@ class GameNode : SKSpriteNode {
     }
 }
 
-// The background is composed by three images.
-class GameBackground: GameNode {
-    convenience init() {
-        self.init(id: 1)
-    }
-    
-    init(id: Int) {
-        self.id = id
-        if id == 0 {
-            self.id = 3
-        }
-        
-        let texture = SKTexture(imageNamed: "bg_cave" + String(self.id) + ".png")
-        let size = CGSize(width: viewWidth, height: viewHeight)
-        super.init(texture: texture, size: size)
-        zPosition = ZPOSITION_BACKGROUND
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    func addNextBackground() -> GameBackground {
-        
-        var background = GameBackground(id: ((id + 1) % 3))
-        background.position.x = position.x + size.width
-        background.position.y = position.y
-        
-        return background
-    }
-    
-    var id = 1
-}
-
 
 class GamePath: GameNode {
     convenience init() {
@@ -77,7 +43,7 @@ class GamePath: GameNode {
         super.init(coder: aDecoder)
     }
     
-    func addNextPath() -> GamePath {
+    func addNextNode() -> GamePath {
         var path = GamePath()
         path.position.x = position.x + size.width
         path.position.y = position.y
@@ -99,11 +65,46 @@ class GameStonePath: GamePath {
         super.init(coder: aDecoder)
     }
     
-    override func addNextPath() -> GameStonePath {
+    override func addNextNode() -> GameStonePath {
         var path = GameStonePath()
         path.position.x = position.x + size.width
         path.position.y = position.y
         
         return path
     }
+}
+
+
+// The background is composed by three images.
+class GameBackgroundPath: GamePath {
+    convenience init() {
+        self.init(id: 1)
+    }
+    
+    init(id: Int) {
+        self.id = id
+        if id == 0 {
+            self.id = 3
+        }
+        
+        let texture = SKTexture(imageNamed: "bg_cave" + String(self.id) + ".png")
+        let size = CGSize(width: viewWidth, height: viewHeight)
+        super.init(texture: texture, size: size)
+        zPosition = ZPOSITION_BACKGROUND
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func addNextNode() -> GameBackgroundPath {
+        
+        var background = GameBackgroundPath(id: ((id + 1) % 3))
+        background.position.x = position.x + size.width
+        background.position.y = position.y
+        
+        return background
+    }
+    
+    var id = 1
 }

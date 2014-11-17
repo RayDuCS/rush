@@ -18,7 +18,9 @@ let RATIO_OBSTACLE_TRIANGLE_DISTANCE = CGFloat(0.5)
 let RATIO_OBSTACLE_RECT_DISTANCE = CGFloat(0.18)
 let RATIO_OBSTACLE_RECT_WIDTH = CGFloat(0.06)
 let RATIO_OBSTACLE_RECT_HEIGHT = CGFloat(0.0926)
-let RATIO_OBSTACLE_RECT_CLASH_HEIGHT = CGFloat(0.08)
+let RATIO_OBSTACLE_RECT_CLASH_HEIGHT = CGFloat(0.065)
+let RATIO_OBSTACLE_RECT_CLASH_HEIGHT_2 = CGFloat(0.13)
+let RATIO_OBSTACLE_RECT_CLASH_HEIGHT_3 = CGFloat(0.19)
 let RATIO_OBSTACLE_RECT_HEIGHT_INCR = CGFloat(0.06)
 let RATIO_OBSTACLE_RECT_CLASH_SAFEZONE = CGFloat(0.03)
 
@@ -249,8 +251,8 @@ class ObstacleGenerator {
         }
         
         var heights:[CGFloat] = []
-        heights.append(viewHeight * CGFloat(0.146))
-        heights.append(viewHeight * CGFloat(0.204))
+        heights.append(viewHeight * RATIO_OBSTACLE_RECT_CLASH_HEIGHT_2)
+        heights.append(viewHeight * RATIO_OBSTACLE_RECT_CLASH_HEIGHT_3)
         for i in 1...2 {
             let imageName = "rectangular" + String(i+1) + ".png"
             var texture = SKTexture(imageNamed: imageName)
