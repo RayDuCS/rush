@@ -31,7 +31,7 @@ import SpriteKit
 // Global var
 var viewWidth = CGFloat(0)
 var viewHeight = CGFloat(0)
-var moveSpeed = CGFloat(7)
+var moveSpeed = CGFloat(3)
 
 class GameScene: SKScene {
     

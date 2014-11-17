@@ -51,6 +51,15 @@ class Floor {
             }
         }
         
+        // Add bgs
+        var first_bg = GameBackground()
+        first_bg.position.x = first_bg.size.width / 2
+        first_bg.position.y = first_bg.size.height / 2
+        bgs.append(first_bg)
+        newNodes.append(first_bg)
+        var second_bg = first_bg.addNextBackground()
+        bgs.append(second_bg)
+        newNodes.append(second_bg)
         
         // Add paths
         var firstPath = GamePath()
@@ -62,6 +71,15 @@ class Floor {
         paths.append(secondPath)
         newNodes.append(secondPath)
         
+        // Add stone paths
+        var firstStonePath = GameStonePath()
+        firstStonePath.position.x = firstStonePath.size.width / 2
+        firstStonePath.position.y = RATIO_PATH_STONE_HEIGHT * viewHeight / 2
+        paths_stone.append(firstStonePath)
+        newNodes.append(firstStonePath)
+        var secondStonePath = firstStonePath.addNextPath()
+        paths_stone.append(secondStonePath)
+        newNodes.append(secondStonePath)
         
         return newNodes
     }
@@ -119,6 +137,27 @@ class Floor {
             }
         }
         
+        // Update bg
+        for bg in bgs {
+            if x < 2 {
+                bg.update(2)
+            } else {
+                bg.update(x - 2)
+            }
+        }
+        
+        while let bg = bgs.first {
+            if CGRectGetMaxX(bg.frame) <= 0 {
+                bgs.removeAtIndex(0)
+                bg.removeFromParent()
+                let new_bg = bgs.last!.addNextBackground()
+                newNodes.append(new_bg)
+                bgs.append(new_bg)
+            } else {
+                break
+            }
+        }
+        
         // Update path
         for path in paths {
             path.update(x)
@@ -131,6 +170,23 @@ class Floor {
                 let newPath = paths.last!.addNextPath()
                 newNodes.append(newPath)
                 paths.append(newPath)
+            } else {
+                break
+            }
+        }
+        
+        // Update stone path
+        for path in paths_stone {
+            path.update(x + 3)
+        }
+        
+        while let path = paths_stone.first {
+            if CGRectGetMaxX(path.frame) <= 0 {
+                paths_stone.removeAtIndex(0)
+                path.removeFromParent()
+                let newPath = paths_stone.last!.addNextPath()
+                newNodes.append(newPath)
+                paths_stone.append(newPath)
             } else {
                 break
             }
@@ -228,8 +284,9 @@ class Floor {
         return floorLine
     }
 
-    var backgrounds: [GameBackground] = [] // the backgrounds
+    var bgs: [GameBackground] = [] // the backgrounds
     var paths: [GamePath] = [] // the paths
+    var paths_stone: [GameStonePath] = [] // the stone paths
     
     var floorLine: SKSpriteNode = SKSpriteNode() // the floor
     var rushingCube: Cube = Cube() // the cube.

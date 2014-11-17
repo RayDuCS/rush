@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-let CUBE_JUMP_SPEED = CGFloat(8.0)
+let CUBE_JUMP_SPEED = CGFloat(4.0)
 let CUBE_JUMP_HEIGHT_MAX = CGFloat(0.25) * viewHeight
 let CUBE_ANIMATION_ROTATION_TIME = (CUBE_JUMP_HEIGHT_MAX / CUBE_JUMP_SPEED * 2 / 60)
 let CUBE_ANIMATION_ROTATION_KEY = "CUBE_ANIMATION_ROTATION_KEY"
@@ -151,7 +151,7 @@ class Cube: GameNode {
             // Only RectObstacle will return this code, this means the cube collide with the top of RectObstacle
             // If the cube is not sliding, make it slide
             if state != .CUBESTATE_SLIDE {
-                stopFall(CGRectGetMaxY(obs.frame) + frame.height / 2)
+                stopFall(CGRectGetMaxY(obs.clashCheckFrame) + frame.height / 2)
             }
             
             return false
